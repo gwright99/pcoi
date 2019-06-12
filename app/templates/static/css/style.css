@@ -1,0 +1,28 @@
+.hide {
+	/* visibility: hidden */
+	display: none;
+}
+
+.show {
+	/* visibility: visible */
+	display: block;
+	margin: 20px;
+	padding-left: 50px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.getDiv {
+	/* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-evenly;
+}
+
+.error {
+	font-size: 80%;
+	color: red;
+}

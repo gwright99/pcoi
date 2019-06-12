@@ -1,0 +1,21 @@
+# https://runnable.com/docker/python/dockerize-your-flask-application
+FROM ubuntu:18.04
+
+MAINTAINER Graham Wright "graham.wright@ehealthontario.on.ca"
+
+RUN apt-get update -y && \ 
+	apt-get install -y python3-pip python3-dev
+	
+# https://runnable.com/docker/python/dockerize-your-flask-application
+# Copy just the requirements.txt first to leverage the Docker cache
+
+COPY ./requirements.txt /PCOI/requirements.txt
+
+WORKDIR /PCOI/
+RUN pip install -r requirements.txt
+
+COPY . /PCOI
+
+ENTYPOINT [ "python" ]
+
+CMD [ "pcoi.py" ]

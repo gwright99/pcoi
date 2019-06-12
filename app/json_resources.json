@@ -1,0 +1,199 @@
+---- How to create JSON FHIR resources ---- 
+See this URL: https://stackoverflow.com/questions/48632585/how-to-generate-json-using-jinja2-template-engine
+
+https://jsonformatter.org/json-parser
+
+from jinja2 import Template
+template = Template('''
+"Matches": {
+				"key1": "{{ value1 }}",
+				"key2": "{{ value2 }}"
+			}''')
+template_w_values = template.render(value1 = "value1", value2 = "value2")
+json.loads(template_w_values)
+
+
+---- CONSENT RESOURCE ----
+{
+	"resourceType": "Consent",
+	"id": "example-ca-on-consent-profile-consent",
+	"meta": {
+		"lastUpdated": "2016-02-23T20:13:58-05:00"
+	},
+	"text": {
+		"status": "additional",
+		"div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>%Some xhtml content%</p></div>"
+	},
+	"status": "active",
+	"category": {
+		"coding": [
+			{
+				"system": "http://hl7.org/fhir/v3/ActCode",
+				"code": "INFA",
+				"display": "information access"
+			}
+		]
+	},
+	"patient": {
+		"reference": "#pat1"
+	},
+	"dateTime": "2016-11-18",
+	"consentingParty": [
+		{
+			"reference": "#relatedperson1"
+		}
+	],
+	"organization": [
+		{
+			"reference": "#org1"
+		}
+	],
+	"policy": [
+		{
+			"authority": "http://ontario.ca"
+		}
+	],
+	"except": [
+		{
+			"type": "permit",
+			"actor": [
+				{
+					"role": {
+						"coding": [
+							{
+								"system": "http://hl7.org/fhir/v3/ParticipationType",
+								"code": "IRCP",
+								"display": "information recipient"
+							}
+						]
+					},
+					"reference": {
+						"reference": "#practitioner-consent-obtainer1"
+					}
+				}
+			],
+			"action": [
+				{
+					"coding": [
+						{
+							"system": "http://hl7.org/fhir/consentaction",
+							"code": "access",
+							"display": "Access"
+						}
+					]
+				}
+			],
+			"purpose": [
+				{
+					"system": "http://hl7.org/fhir/v3/ActReason",
+					"code": "PATRQT",
+					"display": "patient request"
+				}
+			],
+			"class": [
+				{
+					"system": "urn:ietf:rfc:3986",
+					"code": "https://ehealthontario.ca/API/FHIR/Medications",
+					"display": "Ontario Medications"
+				}
+			]
+		}
+	]
+}
+	
+
+---- RELATEDPERSON (CONSENT) RESOURCE ----
+{
+	"resourceType": "RelatedPerson",
+	"id": "peter",
+	"patient": {
+		"reference": "Patient/1"
+	},
+	"relationship": {
+		"coding": [
+			{
+				"system": "http://hl7.org/fhir/patient-contact-relationship",
+				"code": "guardian"
+			}
+		]
+	},
+	"name": [
+		{
+			"family": "Chalmers",
+			"given": [
+				"Peter",
+				"James"
+			]
+		}
+	]
+}
+
+
+---- PATIENT (CONSENT) RESOURCE ----
+{
+	"resourceType": "Patient",
+	"id": "123456789",
+	"identifier": [
+		{
+			"system": "[id-system-global-base]/ca-on-patient-hcn",
+			"value": "1234567"
+		}
+	],
+	"name": [
+		{
+			"family": "Onsmith1",
+			"given": [
+				"Onjohn1"
+			]
+		}
+	],
+	"gender": "male",
+	"birthDate": "1926-02-24"
+}
+
+
+
+---- Practitioner (CONSENT) RESOURCE ----
+{
+	"resourceType": "Practitioner",
+	"id": "2351",
+	"identifier": [
+		{
+			"system": "[id-system-global-base]/ca-on-provider-upi",
+			"value": "4758621"
+		}
+	],
+	"name": [
+		{
+			"family": "Ondoclast",
+			"given": [
+				"Ondocfirst"
+			]
+		}
+	],
+	"telecom": [
+		{
+			"system": "phone",
+			"value": "555-555-5555",
+			"use": "work"
+		}
+	]
+}
+
+
+---- ORG (CONSENT) RESOURCE ----
+{
+	"resourceType": "Organization",
+	"id": "62",
+	"identifier": [
+		{
+			"system": "[id-system-global-base]/ca-on-provider-upi",
+			"value": "12345"
+		}
+	],
+	"name": "Best Clinic"
+}
+
+
+
+		

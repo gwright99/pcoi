@@ -1,0 +1,7 @@
+http://localhost:5000/pcoi2?system=HHSC&org_upi=123&provider_upi=456&patient_hcn=ABC&patient_given_name=Billy%20Bob&patient_family_name=Gibbons
+
+http://localhost:5000/pcoi2?system=CONV&org_upi=123&provider_upi=456&patient_hcn=ABC&patient_given_names=Billy%20Bob&patient_family_name=Gibbon
+http://localhost:5000/pcoi2?system=CONV&org_upi=123&provider_upi=456&patient_hcn=ABC&patient_given_names=Billy%20Bob&patient_family_name=Gibbon
+
+localhost:5000/pcoi2?system=CONV&org_upi=123&provider_upi=456&patient_hcn=ABC&patient_given_names=Billy&patient_family_name=Gibbon&provider_given_names=Zebediah&provider_family_name=Jones
+localhost:5000/pcoi2?system=CONV&org_upi=123&org_name=Happy%20Clinic&provider_upi=456&patient_hcn=ABC&patient_given_names=Billy&patient_family_name=Gibbon&provider_given_names=Zebediah&provider_family_name=Jones

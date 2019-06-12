@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+	<head>
+		{% block head %}
+		<link rel="stylesheet" href="/static/css/style.css">
+		<script src="/static/js/script2.js"></script>
+		<title>{% block title %}{% endblock %} - PCOI Demo</title>
+		{% endblock %}
+	</head>
+	<body>
+		<!--<h1>Invoke Consent Override via PCOI</h1>-->
+		
+		<fieldset>
+			<legend>Values provided by calling system (for reference)</legend>
+			<div class='getDiv'>
+				<div>
+					<p><u>Provider Details</u></p>
+					<p><span class='bold'>System:</span> {{ args['system'] }}</p>
+					<p id='org_upi'><span class='bold'>Org UPI:</span> {{ args['org_upi'] }}</p>
+					<p id='org_name'><span class='bold'>Org Name:</span> {{ args['org_name'] }}</p>
+					<p><span class='bold'>Provider UPI:</span> {{ args['provider_upi'] }}</p>
+					<p id='provider_given_names'><span class='bold'>Provider Given Name(s):</span> {{ args['provider_given_names'] }}</p>
+					<p id='provider_family_name'><span class='bold'>Provider Family Name:</span> {{ args['provider_family_name'] }}</p>
+				</div>
+				<div>
+					<p><u>Patient Details</u></p>
+					<p><span class='bold'>Patient HCN:</span> {{ args['patient_hcn'] }}</p>
+					<p><span class='bold'>Patient Given Name(s):</span> {{ args['patient_given_names'] }}</p>
+					<p><span class='bold'>Patient Family Name:</span> {{ args['patient_family_name'] }}</p>
+				</div>
+				<div>
+					<p><u>Time Transaction Received</u></p>
+					<p><span class='bold'>Date:</span> {{ args['received_date'] }}</p>
+					<p><span class='bold'>Time:</span> {{ args['received_time'] }}</p>
+					<p><span class='bold'>LOB To Override:</span> {{ args['lob_to_override'] }}</p>
+			</div>
+		</fieldset>
+		<br><br>
+		
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+					<p class='error'>{{ message }}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+		
+		{% for message in form.sdm_given_names.errors %}
+			<div class='error'> {{ message }} </div>
+		{% endfor %}
+		
+		<form action="http://localhost:5000/pcoi2" method="post">
+			<fieldset>
+				<legend>
+					<b>Access to one or multiple records is restricted based on the patient's instruction</b>
+				</legend>
+				<br>
+				{{ form.hidden_tag() }}
+			
+				<div>
+					<p> You may access these records under limited circumstances. Please select which circumstance applies:</p>
+					<!--{{ form.override_type.label }}<br> -->
+					{{ form.override_type }}<br>
+						
+					<div id="patient_div" class="hide">
+						{{ form.patient_family_name.label }}
+						{{ form.patient_family_name(value=args['patient_family_name']) }}<br>
+						{{ form.patient_given_names.label }}
+						{{ form.patient_given_names(value=args['patient_given_names']) }} <br>
+						{{ form.patient_hcn.label }}
+						{{ form.patient_hcn(value=args['patient_hcn']) }}
+					</div>
+						
+					<div id="sdm_div" class="hide">
+						{{ form.sdm_family_name.label }}
+						{{ form.sdm_family_name }}<br>
+						{{ form.sdm_given_names.label }}
+						{{ form.sdm_given_names }}<br>
+						{{ form.sdm_code.label }}
+						{{ form.sdm_code }} <br>
+					</div>
+					
+					<div id="btgi_div" class="hide">
+						<p>BTG Individual - Insert something here</p>
+						{{ form.btgi_explanation.label }}
+						{{ form.btgi_explanation }}
+					</div>
+					
+					<div id="btgo_div" class="hide">
+						<p>BTG Others - Insert something here</p>
+						{{ form.btgo_explanation.label }}
+						{{ form.btgo_explanation }}
+					</div>
+					
+					{% if 'DHDR' in args['lob_to_override'].upper() %}
+						{{ form.confirm_dhdr_wet_signature.label }}
+						{{ form.confirm_dhdr_wet_signature }}<br>
+						<a onclick="getpdf()" href="#">Auto-populate DHDR Form</a>
+					{% endif %}
+					
+					<div id="trx_div" class="hide">
+						<p>{{ form.trx_details(value=args) }}</p><br>
+					</div>
+						
+					<br><br>
+					{{ form.submit() }}
+				</div>
+			</fieldset>
+		</form>
+	</body>
+</html>
